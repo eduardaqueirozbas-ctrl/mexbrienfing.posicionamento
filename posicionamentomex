@@ -1,0 +1,854 @@
+index.html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEX — Briefing & Onboarding</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --mex-green: #2D5A3D;
+      --mex-green-light: #3A6B4A;
+      --mex-green-pale: #e8f0ea;
+      --mex-gold: #C9A96E;
+      --mex-gold-light: #E8D5B0;
+      --mex-gold-pale: #faf5ec;
+      --bg: #f5f5f3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #666;
+      --text-hint: #999;
+      --border: rgba(0,0,0,0.1);
+      --border-md: rgba(0,0,0,0.18);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .dashboard { max-width: 760px; margin: 0 auto; padding-bottom: 3rem; }
+
+    /* HEADER */
+    .mex-header {
+      background: var(--mex-green);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .logo-area { display: flex; align-items: center; gap: 14px; }
+    .logo-badge {
+      width: 52px; height: 52px; border-radius: 10px;
+      background: var(--mex-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600; color: var(--mex-green);
+      letter-spacing: 0.5px; flex-shrink: 0;
+    }
+    .header-text h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .header-text p { font-size: 13px; color: var(--mex-gold-light); margin-top: 2px; }
+    .welcome-pill {
+      background: rgba(201,169,110,0.18);
+      border: 0.5px solid var(--mex-gold);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: var(--mex-gold-light);
+      white-space: nowrap;
+    }
+
+    /* PROGRESS */
+    .progress-wrap {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      margin-bottom: 8px; font-size: 13px;
+      color: var(--text-muted);
+    }
+    .progress-label strong { color: var(--mex-green); }
+    .track { height: 7px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+    .fill { height: 100%; background: var(--mex-green); border-radius: 10px; transition: width 0.4s ease; }
+    .step-dots { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .step-dot {
+      font-size: 11px; padding: 3px 10px; border-radius: 12px;
+      border: 0.5px solid var(--border-md); color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s; background: var(--surface);
+    }
+    .step-dot.active { background: var(--mex-green); color: #fff; border-color: var(--mex-green); }
+    .step-dot.done { background: var(--mex-green-pale); color: var(--mex-green); border-color: var(--mex-green); }
+
+    /* TABS */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .tab {
+      padding: 7px 14px; border-radius: var(--radius);
+      border: 0.5px solid var(--border-md);
+      background: var(--surface);
+      font-size: 13px; color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab.active { background: var(--mex-green); color: #fff; border-color: var(--mex-green); }
+    .tab:hover:not(.active) { background: #f0f0f0; }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .card-title i { color: var(--mex-gold); font-size: 18px; }
+
+    /* FIELDS */
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+    label.lbl {
+      display: block; font-size: 12px; color: var(--text-muted);
+      margin-bottom: 5px; font-weight: 500;
+    }
+    label.lbl span { font-weight: 400; color: var(--text-hint); }
+    input[type=text], input[type=date], input[type=email], input[type=tel], textarea, select {
+      width: 100%; border-radius: var(--radius);
+      border: 0.5px solid var(--border-md);
+      padding: 9px 12px; font-size: 14px;
+      color: var(--text); background: var(--surface);
+      font-family: inherit; transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--mex-green);
+      box-shadow: 0 0 0 3px rgba(45,90,61,0.08);
+    }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* BIRTHDAY */
+    .birthday-card {
+      background: var(--mex-gold-pale);
+      border: 0.5px solid var(--mex-gold);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 14px;
+    }
+    .birthday-card i { color: var(--mex-gold); font-size: 22px; flex-shrink: 0; }
+    .birthday-card .inner { flex: 1; }
+    .birthday-card label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px; font-weight: 500; }
+
+    /* TAGS */
+    .tag-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .tag-row input { flex: 1; }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .tag {
+      padding: 4px 10px; border-radius: 12px;
+      background: var(--mex-green-pale); color: var(--mex-green);
+      font-size: 12px; border: 0.5px solid var(--mex-green);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .tag button { background: none; border: none; cursor: pointer; color: var(--mex-green); font-size: 13px; padding: 0; line-height: 1; }
+
+    /* UPLOAD */
+    .upload-zone {
+      border: 1.5px dashed var(--border-md);
+      border-radius: var(--radius);
+      padding: 1.25rem; text-align: center;
+      cursor: pointer; transition: all 0.2s; position: relative;
+    }
+    .upload-zone:hover { border-color: var(--mex-green); background: var(--mex-green-pale); }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-zone i { font-size: 26px; color: var(--mex-green); margin-bottom: 6px; display: block; }
+    .upload-zone p { font-size: 13px; color: var(--text-muted); }
+    .upload-zone small { font-size: 11px; color: var(--text-hint); }
+    .thumb-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .thumb-wrap { position: relative; display: inline-block; }
+    .thumb { width: 64px; height: 64px; border-radius: var(--radius); object-fit: cover; border: 0.5px solid var(--border); }
+    .thumb-remove {
+      position: absolute; top: -6px; right: -6px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #c0392b; color: #fff; border: none; cursor: pointer;
+      font-size: 10px; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* AUDIO */
+    .audio-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: var(--radius);
+      border: 0.5px solid var(--border-md);
+      background: #f7f7f7; cursor: pointer;
+      font-size: 13px; color: var(--text);
+      transition: all 0.2s; font-family: inherit;
+      margin-top: 6px;
+    }
+    .audio-btn.recording { background: #fef2f2; border-color: #e24b4a; color: #e24b4a; }
+    .recordings { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .rec-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-muted);
+      background: #f7f7f7; padding: 6px 10px;
+      border-radius: var(--radius); border: 0.5px solid var(--border);
+    }
+    .rec-item audio { height: 28px; flex: 1; }
+
+    /* CHECKLIST */
+    .checklist { display: flex; flex-direction: column; gap: 8px; }
+    .check-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: var(--radius);
+      border: 0.5px solid var(--border); cursor: pointer; transition: all 0.2s;
+    }
+    .check-item.checked { background: var(--mex-green-pale); border-color: var(--mex-green); }
+    .check-box {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 1.5px solid #ccc; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .check-item.checked .check-box { background: var(--mex-green); border-color: var(--mex-green); }
+    .check-label { font-size: 13px; }
+    .check-item.checked .check-label { color: var(--mex-green); }
+
+    /* LINKS */
+    .link-add { display: flex; gap: 8px; margin-bottom: 10px; }
+    .link-add input:first-child { width: 120px; flex-shrink: 0; }
+    .link-add input:last-of-type { flex: 1; }
+    .link-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: var(--radius);
+      border: 0.5px solid var(--border); background: #f7f7f7;
+      font-size: 13px; margin-bottom: 6px;
+    }
+    .link-item a { color: var(--mex-green); text-decoration: none; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .link-remove { background: none; border: none; cursor: pointer; color: var(--text-hint); font-size: 15px; padding: 2px; }
+
+    /* EMBED */
+    .embed-placeholder {
+      background: #f7f7f7; border: 0.5px dashed var(--border-md);
+      border-radius: var(--radius); padding: 1.25rem; text-align: center;
+    }
+    .embed-placeholder i { font-size: 28px; color: var(--text-hint); margin-bottom: 8px; display: block; }
+    .embed-placeholder p { font-size: 13px; color: var(--text-muted); }
+    .embed-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .embed-frame { width: 100%; height: 200px; border: none; border-radius: var(--radius); margin-top: 10px; }
+
+    /* BUTTONS */
+    .btn {
+      padding: 9px 16px; border-radius: var(--radius);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      border: 0.5px solid var(--border-md);
+      background: var(--surface); color: var(--text);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .btn:hover { background: #f0f0f0; }
+    .btn.primary { background: var(--mex-green); color: #fff; border-color: var(--mex-green); }
+    .btn.primary:hover { background: var(--mex-green-light); }
+    .btn.whatsapp { background: #25D366; color: #fff; border-color: #25D366; }
+    .btn.whatsapp:hover { background: #1ebe5d; }
+
+    /* ACTION BAR */
+    .action-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-top: 1.25rem; align-items: center;
+    }
+    .autosave {
+      font-size: 11px; color: var(--mex-green);
+      display: none; align-items: center; gap: 4px;
+      margin-left: auto;
+    }
+
+    /* SUMMARY */
+    .summary-box {
+      background: var(--mex-green); border-radius: var(--radius-lg);
+      padding: 1.5rem; margin-top: 1.25rem;
+    }
+    .summary-box h3 { font-size: 15px; font-weight: 600; color: var(--mex-gold-light); margin-bottom: 16px; }
+    .summary-section { margin-bottom: 14px; }
+    .summary-section h4 { font-size: 11px; color: var(--mex-gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .summary-line { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.7; }
+    .summary-line strong { color: var(--mex-gold-light); }
+    .summary-footer { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 14px; }
+
+    /* SECTION hidden */
+    .section { display: none; }
+    .section.visible { display: block; }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      body { padding: 0.75rem; }
+      .mex-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .row2 { grid-template-columns: 1fr; }
+      .tabs { gap: 4px; }
+      .tab { font-size: 12px; padding: 6px 10px; }
+      .action-bar { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .link-add { flex-direction: column; }
+      .link-add input:first-child { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="mex-header">
+    <div class="logo-area">
+      <div class="logo-badge">MEX</div>
+      <div class="header-text">
+        <h1>Medicina Executiva</h1>
+        <p>Sistema de Onboarding &amp; Briefing</p>
+      </div>
+    </div>
+    <div class="welcome-pill" id="welcomePill">✦ Bem-vindo(a)</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progresso do briefing</span>
+      <strong id="progressPct">0%</strong>
+    </div>
+    <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+    <div class="step-dots" id="stepDots"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="tabBar"></div>
+
+  <!-- SECTIONS -->
+  <div id="allSections">
+
+    <div class="section" id="sec-boas-vindas">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-star"></i>Informações do cliente</div>
+        <div class="birthday-card">
+          <i class="ti ti-cake"></i>
+          <div class="inner">
+            <label for="aniversario">Data de aniversário</label>
+            <input type="date" id="aniversario" oninput="save('aniversario',this.value)">
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Nome completo</label><input type="text" id="nome" placeholder="Dr. Nome Sobrenome" oninput="save('nome',this.value)"></div>
+        <div class="row2">
+          <div class="field"><label class="lbl">WhatsApp</label><input type="tel" id="whatsapp" placeholder="(00) 90000-0000" oninput="save('whatsapp',this.value)"></div>
+          <div class="field"><label class="lbl">E-mail</label><input type="email" id="email" placeholder="seu@email.com" oninput="save('email',this.value)"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Instagram</label><input type="text" id="instagram" placeholder="@seuinstagram" oninput="save('instagram',this.value)"></div>
+          <div class="field"><label class="lbl">Como prefere ser chamado(a)?</label><input type="text" id="apelido" placeholder="Apelido ou nome" oninput="save('apelido',this.value)"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-microphone"></i>Apresentação em áudio</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Grave uma apresentação rápida — quem você é, o que faz e o que espera do projeto.</p>
+        <div id="audio-apresentacao"></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-identidade">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-stethoscope"></i>Identidade profissional</div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Especialidade</label><input type="text" id="especialidade" placeholder="Ex: Cardiologista" oninput="save('especialidade',this.value)"></div>
+          <div class="field"><label class="lbl">CRM</label><input type="text" id="crm" placeholder="CRM 00000 — UF" oninput="save('crm',this.value)"></div>
+        </div>
+        <div class="field"><label class="lbl">Nome da clínica / consultório</label><input type="text" id="clinica" placeholder="Ex: Clínica Saúde & Vida" oninput="save('clinica',this.value)"></div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Cidade de atuação</label><input type="text" id="cidade" placeholder="Ex: São Paulo — SP" oninput="save('cidade',this.value)"></div>
+          <div class="field"><label class="lbl">Tempo de atuação</label><input type="text" id="tempo" placeholder="Ex: 10 anos" oninput="save('tempo',this.value)"></div>
+        </div>
+        <div class="field"><label class="lbl">Formação e especializações</label><textarea id="formacao" placeholder="Residências, fellowships, pós-graduações..." oninput="save('formacao',this.value)"></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-id-badge"></i>Sua história</div>
+        <div class="field"><label class="lbl">Conte sua trajetória profissional <span>(por que escolheu medicina, maiores conquistas...)</span></label><textarea id="historia" placeholder="Escreva aqui ou grave em áudio abaixo..." style="min-height:120px" oninput="save('historia',this.value)"></textarea></div>
+        <div id="audio-historia"></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-posicionamento">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-target"></i>Público e objetivos</div>
+        <div class="field"><label class="lbl">Quem é o seu paciente ideal?</label><textarea id="publico" placeholder="Faixa etária, perfil, dores, desejos, nível socioeconômico..." oninput="save('publico',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Principal objetivo do Instagram</label><textarea id="objetivo" placeholder="Ex: atrair pacientes particulares, construir autoridade, vender cursos..." oninput="save('objetivo',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Meta de alcance / seguidores</label><input type="text" id="meta" placeholder="Ex: 10k em 6 meses" oninput="save('meta',this.value)"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-award"></i>Diferenciais e posicionamento</div>
+        <div class="field"><label class="lbl">O que te diferencia dos outros médicos?</label><textarea id="diferenciais" placeholder="Atendimento, método, valores, personalidade..." oninput="save('diferenciais',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Como quer ser percebido(a)?</label><textarea id="tom" placeholder="Ex: autoridade acolhedora, técnico e acessível, premium e exclusivo..." oninput="save('tom',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">O que você NÃO quer no conteúdo?</label><textarea id="nao_falar" placeholder="Assuntos ou abordagens que você evita..." oninput="save('nao_falar',this.value)"></textarea></div>
+        <div id="audio-posicionamento"></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-conteudo">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-layout"></i>Estratégia de conteúdo</div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Frequência de postagem</label><input type="text" id="frequencia" placeholder="Ex: 4x por semana" oninput="save('frequencia',this.value)"></div>
+          <div class="field"><label class="lbl">Personalidade em 3 palavras</label><input type="text" id="personalidade" placeholder="Ex: elegante, direta, acolhedora" oninput="save('personalidade',this.value)"></div>
+        </div>
+        <div class="field"><label class="lbl">Formatos preferidos</label><textarea id="formatos" placeholder="Ex: Reels educativos, carrossel, stories diários..." oninput="save('formatos',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Pilares / temas de conteúdo</label><textarea id="pilares" placeholder="Liste os temas principais do seu perfil..." oninput="save('pilares',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Assuntos a evitar</label><textarea id="evitar" placeholder="Temas sensíveis, polêmicas..." oninput="save('evitar',this.value)"></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-palette"></i>Identidade visual</div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Cores da identidade visual</label><input type="text" id="cores" placeholder="Ex: verde musgo, dourado, off-white" oninput="save('cores',this.value)"></div>
+          <div class="field"><label class="lbl">Fontes / tipografia (se souber)</label><input type="text" id="fontes" placeholder="Ex: serif elegante, sans-serif clean" oninput="save('fontes',this.value)"></div>
+        </div>
+        <div class="field"><label class="lbl">Estilos visuais que NÃO gosta</label><textarea id="nao_visual" placeholder="Ex: muito colorido, poluído, informal demais..." oninput="save('nao_visual',this.value)"></textarea></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-referencias">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-at"></i>Referências de perfis</div>
+        <div id="tags-estetica-wrap">
+          <label class="lbl">Perfis de referência estética <span>(feed, visual)</span></label>
+          <div class="tag-row"><input type="text" id="tags-estetica-inp" placeholder="@username — pressione Enter"><button class="btn" onclick="addTag('estetica')"><i class="ti ti-plus"></i></button></div>
+          <div class="tag-cloud" id="tags-estetica-cloud"></div>
+        </div>
+        <br>
+        <div id="tags-conteudo-wrap">
+          <label class="lbl">Perfis de referência de conteúdo <span>(abordagem, temas)</span></label>
+          <div class="tag-row"><input type="text" id="tags-conteudo-inp" placeholder="@username — pressione Enter"><button class="btn" onclick="addTag('conteudo')"><i class="ti ti-plus"></i></button></div>
+          <div class="tag-cloud" id="tags-conteudo-cloud"></div>
+        </div>
+        <br>
+        <div id="tags-posic-wrap">
+          <label class="lbl">Perfis de referência de posicionamento <span>(nicho, autoridade)</span></label>
+          <div class="tag-row"><input type="text" id="tags-posic-inp" placeholder="@username — pressione Enter"><button class="btn" onclick="addTag('posic')"><i class="ti ti-plus"></i></button></div>
+          <div class="tag-cloud" id="tags-posic-cloud"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-photo"></i>Arquivos e referências visuais</div>
+        <div id="upload-fotos-wrap">
+          <label class="lbl" style="margin-bottom:8px">Fotos suas (profissional, casual, clínica)</label>
+          <div class="upload-zone"><input type="file" multiple accept="image/*" onchange="handleUpload('fotos',this)"><i class="ti ti-upload"></i><p>Clique ou arraste imagens</p><small>JPG, PNG, WEBP</small></div>
+          <div class="thumb-grid" id="thumbs-fotos"></div>
+        </div>
+        <br>
+        <div id="upload-refs-wrap">
+          <label class="lbl" style="margin-bottom:8px">Referências visuais / estética</label>
+          <div class="upload-zone"><input type="file" multiple accept="image/*" onchange="handleUpload('refs',this)"><i class="ti ti-upload"></i><p>Clique ou arraste imagens</p></div>
+          <div class="thumb-grid" id="thumbs-refs"></div>
+        </div>
+        <br>
+        <div id="upload-logo-wrap">
+          <label class="lbl" style="margin-bottom:8px">Logo, manual de marca, materiais</label>
+          <div class="upload-zone"><input type="file" multiple accept="image/*,application/pdf,.pdf" onchange="handleUpload('logo',this)"><i class="ti ti-upload"></i><p>Clique ou arraste arquivos</p><small>Imagens ou PDF</small></div>
+          <div class="thumb-grid" id="thumbs-logo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-links">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-link"></i>Links importantes</div>
+        <div class="link-add">
+          <input type="text" id="linkLabel" placeholder="Nome (ex: Site)">
+          <input type="text" id="linkUrl" placeholder="https://...">
+          <button class="btn" onclick="addLink()"><i class="ti ti-plus"></i></button>
+        </div>
+        <div id="linksList"><p style="font-size:13px;color:var(--text-hint)">Nenhum link adicionado ainda.</p></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-music"></i>Playlist de trabalho</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Cole um link do Spotify ou YouTube para incorporar.</p>
+        <div class="embed-row">
+          <input type="text" id="playlistInp" placeholder="https://open.spotify.com/... ou youtube.com/..." style="flex:1">
+          <button class="btn primary" onclick="embedPlaylist()"><i class="ti ti-player-play"></i> Incorporar</button>
+        </div>
+        <div id="playlistFrame"><div class="embed-placeholder"><i class="ti ti-music"></i><p>Nenhuma playlist incorporada ainda</p></div></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-checklist">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-checkbox"></i>Checklist de onboarding</div>
+        <div class="checklist" id="checklistContainer"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-notes"></i>Observações</div>
+        <div class="field"><label class="lbl">Observações internas da equipe</label><textarea id="obs" placeholder="Notas, alertas, combinados internos..." oninput="save('obs',this.value)"></textarea></div>
+        <div class="field"><label class="lbl">Expectativas do cliente</label><textarea id="expectativas" placeholder="O que ele/ela espera? Prazos, metas, comunicação..." oninput="save('expectativas',this.value)"></textarea></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACTION BAR -->
+  <div class="action-bar">
+    <button class="btn primary" onclick="generateSummary()"><i class="ti ti-list-check"></i> Gerar resumo</button>
+    <button class="btn" onclick="copyAnswers()"><i class="ti ti-copy"></i> Copiar respostas</button>
+    <button class="btn whatsapp" onclick="sendWhatsApp()"><i class="ti ti-brand-whatsapp"></i> Enviar no WhatsApp</button>
+    <div class="autosave" id="autosaveMsg"><i class="ti ti-device-floppy"></i> Salvo</div>
+  </div>
+
+  <div id="summaryArea"></div>
+
+</div>
+
+<script>
+const TABS = [
+  { id: 'boas-vindas', label: 'Boas-vindas', icon: 'ti-star' },
+  { id: 'identidade', label: 'Identidade', icon: 'ti-user-circle' },
+  { id: 'posicionamento', label: 'Posicionamento', icon: 'ti-target' },
+  { id: 'conteudo', label: 'Conteúdo', icon: 'ti-layout' },
+  { id: 'referencias', label: 'Referências', icon: 'ti-photo' },
+  { id: 'links', label: 'Links & Playlist', icon: 'ti-link' },
+  { id: 'checklist', label: 'Checklist', icon: 'ti-checkbox' },
+];
+
+const CHECKLIST_ITEMS = [
+  ['contrato','Contrato assinado'],
+  ['pagamento','Primeiro pagamento confirmado'],
+  ['acesso_ig','Acesso ao Instagram concedido'],
+  ['acesso_canva','Acesso ao Canva concedido'],
+  ['briefing','Briefing 100% preenchido'],
+  ['fotos','Fotos do cliente recebidas'],
+  ['logo','Logo e identidade visual recebidas'],
+  ['kickoff','Reunião de kickoff realizada'],
+  ['calendario','Calendário editorial aprovado'],
+  ['posts','Primeiros posts criados'],
+  ['revisao','Revisão feita pelo cliente'],
+  ['publicacao','Primeira publicação realizada'],
+];
+
+const PROGRESS_FIELDS = ['nome','aniversario','especialidade','cidade','publico','objetivo','diferenciais','tom','frequencia','formatos','pilares'];
+
+let currentTab = 'boas-vindas';
+let D = {};
+let tagData = { estetica: [], conteudo: [], posic: [] };
+let uploadedFiles = { fotos: [], refs: [], logo: [] };
+let links = [];
+let checklist = {};
+let embedUrl = '';
+let mediaRecorder = null;
+let audioChunks = [];
+let recordings = {};
+
+function loadAll() {
+  try {
+    const s = localStorage.getItem('mex_v2');
+    if (s) {
+      const p = JSON.parse(s);
+      D = p.D || {};
+      tagData = p.tagData || { estetica: [], conteudo: [], posic: [] };
+      links = p.links || [];
+      checklist = p.checklist || {};
+      embedUrl = p.embedUrl || '';
+    }
+  } catch(e) {}
+}
+
+function saveAll() {
+  try {
+    localStorage.setItem('mex_v2', JSON.stringify({ D, tagData, links, checklist, embedUrl }));
+    const m = document.getElementById('autosaveMsg');
+    m.style.display = 'flex';
+    clearTimeout(window._st);
+    window._st = setTimeout(() => m.style.display = 'none', 2000);
+  } catch(e) {}
+  updateProgress();
+  updateWelcome();
+}
+
+function save(key, val) { D[key] = val; saveAll(); }
+
+function updateWelcome() {
+  const p = document.getElementById('welcomePill');
+  if (D.nome && D.nome.trim()) p.textContent = '✦ Olá, ' + D.nome.split(' ')[0];
+}
+
+function updateProgress() {
+  const filled = PROGRESS_FIELDS.filter(f => D[f] && String(D[f]).trim()).length;
+  const pct = Math.round((filled / PROGRESS_FIELDS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  renderStepDots();
+}
+
+function sectionDone(id) {
+  const map = {
+    'boas-vindas': ['nome','aniversario'],
+    'identidade': ['especialidade','cidade'],
+    'posicionamento': ['publico','objetivo'],
+    'conteudo': ['frequencia','formatos'],
+    'referencias': [],
+    'links': [],
+    'checklist': [],
+  };
+  const f = map[id] || [];
+  return f.some(k => D[k] && String(D[k]).trim())
+    || (id === 'referencias' && (tagData.estetica.length || tagData.conteudo.length))
+    || (id === 'links' && links.length)
+    || (id === 'checklist' && Object.values(checklist).some(v => v));
+}
+
+function renderTabs() {
+  document.getElementById('tabBar').innerHTML = TABS.map(t =>
+    `<button class="tab ${t.id === currentTab ? 'active' : ''}" onclick="switchTab('${t.id}')">
+      <i class="ti ${t.icon}"></i>${t.label}
+    </button>`).join('');
+}
+
+function renderStepDots() {
+  document.getElementById('stepDots').innerHTML = TABS.map(t =>
+    `<div class="step-dot ${t.id === currentTab ? 'active' : sectionDone(t.id) ? 'done' : ''}" onclick="switchTab('${t.id}')">${t.label}</div>`
+  ).join('');
+}
+
+function switchTab(id) {
+  document.getElementById('sec-' + currentTab).classList.remove('visible');
+  currentTab = id;
+  document.getElementById('sec-' + id).classList.add('visible');
+  renderTabs();
+  renderStepDots();
+  fillFields();
+}
+
+function fillFields() {
+  Object.keys(D).forEach(k => {
+    const el = document.getElementById(k);
+    if (el && el.tagName !== 'BUTTON') el.value = D[k] || '';
+  });
+  renderTags('estetica');
+  renderTags('conteudo');
+  renderTags('posic');
+  renderAllThumbs();
+  renderLinks();
+  renderChecklist();
+  renderAudioZone('apresentacao');
+  renderAudioZone('historia');
+  renderAudioZone('posicionamento');
+  if (embedUrl) {
+    const inp = document.getElementById('playlistInp');
+    if (inp) inp.value = embedUrl;
+    document.getElementById('playlistFrame').innerHTML = getEmbedHtml(embedUrl);
+  }
+}
+
+// TAGS
+function addTag(group) {
+  const inp = document.getElementById('tags-' + group + '-inp');
+  if (!inp || !inp.value.trim()) return;
+  tagData[group].push(inp.value.trim().replace(/^@/, ''));
+  inp.value = '';
+  renderTags(group);
+  saveAll();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    ['estetica','conteudo','posic'].forEach(g => {
+      const inp = document.getElementById('tags-' + g + '-inp');
+      if (document.activeElement === inp) { e.preventDefault(); addTag(g); }
+    });
+  }
+});
+function removeTag(group, i) { tagData[group].splice(i, 1); renderTags(group); saveAll(); }
+function renderTags(group) {
+  const cloud = document.getElementById('tags-' + group + '-cloud');
+  if (!cloud) return;
+  cloud.innerHTML = (tagData[group] || []).map((t, i) =>
+    `<span class="tag">@${t}<button onclick="removeTag('${group}',${i})">×</button></span>`).join('');
+}
+
+// UPLOAD
+function handleUpload(group, input) {
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      uploadedFiles[group].push({ name: file.name, type: file.type, url: e.target.result });
+      renderThumbs(group);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderThumbs(group) {
+  const el = document.getElementById('thumbs-' + group);
+  if (!el) return;
+  el.innerHTML = (uploadedFiles[group] || []).map((f, i) =>
+    f.type.startsWith('image/')
+      ? `<div class="thumb-wrap"><img class="thumb" src="${f.url}" alt="${f.name}"><button class="thumb-remove" onclick="removeFile('${group}',${i})">×</button></div>`
+      : `<div class="rec-item" style="flex-direction:column;align-items:flex-start"><i class="ti ti-file"></i><span style="font-size:12px">${f.name}</span><button class="thumb-remove" style="position:static;margin-top:4px" onclick="removeFile('${group}',${i})">×</button></div>`
+  ).join('');
+}
+function renderAllThumbs() { ['fotos','refs','logo'].forEach(renderThumbs); }
+function removeFile(group, i) { uploadedFiles[group].splice(i, 1); renderThumbs(group); }
+
+// AUDIO
+function renderAudioZone(field) {
+  const wrap = document.getElementById('audio-' + field);
+  if (!wrap) return;
+  const recs = recordings[field] || [];
+  const recHtml = recs.map((url, i) =>
+    `<div class="rec-item"><i class="ti ti-microphone"></i><audio controls src="${url}" style="flex:1;height:28px"></audio><small>Áudio ${i+1}</small></div>`).join('');
+  wrap.innerHTML = `
+    <label class="lbl" style="margin-top:12px">Resposta em áudio</label>
+    <button class="audio-btn" id="recBtn_${field}" onclick="toggleRec('${field}')">
+      <i class="ti ti-microphone"></i><span id="recLbl_${field}">Gravar áudio</span>
+    </button>
+    <div class="recordings">${recHtml}</div>`;
+}
+function toggleRec(field) {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    document.getElementById('recBtn_' + field).classList.remove('recording');
+    document.getElementById('recLbl_' + field).textContent = 'Gravar áudio';
+  } else {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        if (!recordings[field]) recordings[field] = [];
+        recordings[field].push(URL.createObjectURL(blob));
+        stream.getTracks().forEach(t => t.stop());
+        renderAudioZone(field);
+      };
+      mediaRecorder.start();
+      document.getElementById('recBtn_' + field).classList.add('recording');
+      document.getElementById('recLbl_' + field).textContent = 'Parar gravação';
+    }).catch(() => alert('Permissão de microfone necessária.'));
+  }
+}
+
+// LINKS
+function addLink() {
+  const label = document.getElementById('linkLabel');
+  const url = document.getElementById('linkUrl');
+  if (!url || !url.value.trim()) return;
+  links.push({ label: label.value.trim() || url.value.trim(), url: url.value.trim() });
+  label.value = ''; url.value = '';
+  renderLinks(); saveAll();
+}
+function removeLink(i) { links.splice(i, 1); renderLinks(); saveAll(); }
+function renderLinks() {
+  const el = document.getElementById('linksList');
+  if (!el) return;
+  if (!links.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-hint)">Nenhum link adicionado ainda.</p>'; return; }
+  el.innerHTML = links.map((l, i) =>
+    `<div class="link-item"><i class="ti ti-external-link" style="color:var(--mex-green);font-size:16px"></i>
+    <a href="${l.url}" target="_blank">${l.label}</a>
+    <button class="link-remove" onclick="removeLink(${i})"><i class="ti ti-trash"></i></button></div>`).join('');
+}
+
+// PLAYLIST
+function getEmbedHtml(url) {
+  let src = '';
+  if (url.includes('spotify.com')) {
+    const m = url.match(/spotify\.com\/(playlist|album|track)\/([a-zA-Z0-9]+)/);
+    if (m) src = `https://open.spotify.com/embed/${m[1]}/${m[2]}`;
+  } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    const m = url.match(/list=([a-zA-Z0-9_-]+)/) || url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/) || url.match(/v=([a-zA-Z0-9_-]+)/);
+    if (m) src = url.includes('list=') ? `https://www.youtube.com/embed/videoseries?list=${m[1]}` : `https://www.youtube.com/embed/${m[1]}`;
+  }
+  if (!src) return `<div class="embed-placeholder"><i class="ti ti-alert-circle"></i><p>Link não reconhecido. Use Spotify ou YouTube.</p></div>`;
+  return `<iframe class="embed-frame" src="${src}" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+}
+function embedPlaylist() {
+  const inp = document.getElementById('playlistInp');
+  if (inp) embedUrl = inp.value.trim();
+  saveAll();
+  document.getElementById('playlistFrame').innerHTML = getEmbedHtml(embedUrl);
+}
+
+// CHECKLIST
+function renderChecklist() {
+  const el = document.getElementById('checklistContainer');
+  if (!el) return;
+  el.innerHTML = CHECKLIST_ITEMS.map(([id, label]) => {
+    const checked = checklist[id] ? 'checked' : '';
+    const mark = checklist[id] ? '<i class="ti ti-check" style="color:#fff;font-size:11px"></i>' : '';
+    return `<div class="check-item ${checked}" onclick="toggleCheck('${id}')">
+      <div class="check-box">${mark}</div>
+      <span class="check-label">${label}</span></div>`;
+  }).join('');
+}
+function toggleCheck(id) { checklist[id] = !checklist[id]; renderChecklist(); saveAll(); }
+
+// SUMMARY
+function generateSummary() {
+  const done = Object.entries(checklist).filter(([k,v])=>v).length;
+  const rows = [
+    ['Nome', D.nome], ['Aniversário', D.aniversario], ['WhatsApp', D.whatsapp],
+    ['Instagram', D.instagram], ['Especialidade', D.especialidade], ['Clínica', D.clinica],
+    ['Cidade', D.cidade], ['Público', D.publico], ['Objetivo', D.objetivo],
+    ['Diferenciais', D.diferenciais], ['Tom', D.tom], ['Frequência', D.frequencia],
+    ['Formatos', D.formatos], ['Pilares', D.pilares], ['Cores', D.cores],
+  ];
+  const rowsHtml = rows.filter(([k,v])=>v&&v.trim()).map(([k,v])=>
+    `<div class="summary-line"><strong>${k}:</strong> ${v}</div>`).join('');
+  const tags = [
+    tagData.estetica.map(t=>'@'+t).join(', '),
+    tagData.conteudo.map(t=>'@'+t).join(', '),
+  ].filter(Boolean).join(' | ');
+
+  const area = document.getElementById('summaryArea');
+  area.innerHTML = `<div class="summary-box">
+    <h3>✦ Resumo do briefing — ${D.nome || 'Cliente'}</h3>
+    <div class="summary-section"><h4>Dados gerais</h4>${rowsHtml}</div>
+    ${tags ? `<div class="summary-section"><h4>Referências</h4><div class="summary-line">${tags}</div></div>` : ''}
+    <div class="summary-section"><h4>Onboarding</h4><div class="summary-line">${done} de ${CHECKLIST_ITEMS.length} etapas concluídas</div></div>
+    <div class="summary-footer">Gerado por MEX Medicina Executiva • ${new Date().toLocaleDateString('pt-BR')}</div>
+  </div>`;
+  area.scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyAnswers() {
+  let text = `BRIEFING MEX — ${D.nome || 'Cliente'}\n${'='.repeat(40)}\n\n`;
+  const fields = [['Nome',D.nome],['Aniversário',D.aniversario],['WhatsApp',D.whatsapp],['Instagram',D.instagram],['Especialidade',D.especialidade],['Clínica',D.clinica],['Cidade',D.cidade],['Público',D.publico],['Objetivo',D.objetivo],['Diferenciais',D.diferenciais],['Tom',D.tom],['Frequência',D.frequencia],['Formatos',D.formatos],['Pilares',D.pilares],['Cores',D.cores]];
+  fields.filter(([k,v])=>v&&v.trim()).forEach(([k,v])=>text+=`${k}: ${v}\n`);
+  if (tagData.estetica.length) text += `\nReferências estética: ${tagData.estetica.map(t=>'@'+t).join(', ')}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = event.currentTarget;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i> Copiado!';
+    setTimeout(()=>btn.innerHTML=orig, 2000);
+  });
+}
+
+function sendWhatsApp() {
+  const text = `Olá! Segue meu briefing para o MEX:\n\nNome: ${D.nome||''}\nInstagram: ${D.instagram||''}\nEspecialidade: ${D.especialidade||''}\nObjetivo: ${D.objetivo||''}\n\nQuero iniciar o onboarding! 🌿`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+// INIT
+loadAll();
+renderTabs();
+renderStepDots();
+document.getElementById('sec-' + currentTab).classList.add('visible');
+fillFields();
+updateProgress();
+updateWelcome();
+</script>
+</body>
+</html>
